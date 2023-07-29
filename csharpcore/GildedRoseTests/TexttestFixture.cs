@@ -3,11 +3,14 @@ using GildedRoseKata;
 
 using System;
 using System.Collections.Generic;
+using Moq;
 
 namespace GildedRoseTests
 {
-    public static class TexttestFixture
+    public class TexttestFixture
     {
+        private static readonly Mock<IStrategy> _strategy = new Mock<IStrategy>();
+
         public static void Main(string[] args)
         {
             Console.WriteLine("OMGHAI!");
@@ -40,7 +43,7 @@ namespace GildedRoseTests
                 new Item {Name = "Conjured Mana Cake", SellIn = 3, Quality = 6}
             };
 
-            var app = new GildedRose(Items);
+            var app = new GildedRose(Items, _strategy.Object);
 
             int days = 31;
             if (args.Length > 0)

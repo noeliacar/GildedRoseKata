@@ -18,75 +18,82 @@ namespace GildedRoseKata
         {
             foreach (var item in Items)
             {
-                if (item.Name != AgedBrie && item.Name != Backstage)
+                switch (item.Name)
                 {
-                    if (item.Quality > 0)
-                    {
-                        if (item.Name != Sulfuras)
-                        {
-                            item.Quality -= 1;
-                        }
-                    }
+                    case Sulfuras:
+                        UpdateSulfuras(item);
+                        continue;
+                    case AgedBrie:
+                        UpdateBrie(item);
+                        continue;
+                    case Backstage:
+                        UpdateBackstage(item);
+                        continue;
+                    default:
+                        UpdateRegularItem(item);
+                        continue;
                 }
-                else
-                {
-                    if (item.Quality < 50)
-                    {
-                        item.Quality += 1;
+            }
+        }
 
-                        if (item.Name == Backstage)
-                        {
-                            if (item.SellIn < 11)
-                            {
-                                if (item.Quality < 50)
-                                {
-                                    item.Quality += 1;
-                                }
-                            }
+        private void UpdateSulfuras(Item item)
+        {
+            item.Quality = 80;
+        }
 
-                            if (item.SellIn < 6)
-                            {
-                                if (item.Quality < 50)
-                                {
-                                    item.Quality += 1;
-                                }
-                            }
-                        }
-                    }
-                }
+        private void UpdateBrie(Item item)
+        {
+            item.SellIn -= 1;
 
-                if (item.Name != Sulfuras)
-                {
-                    item.SellIn -= 1;
-                }
+            if (item.Quality < 50)
+            {
+                item.Quality += 1;
+                if (item.SellIn < 0 && item.Quality < 50)
+                    item.Quality += 1;
+            }
 
-                if (item.SellIn < 0)
-                {
-                    if (item.Name != AgedBrie)
-                    {
-                        if (item.Name != Backstage)
-                        {
-                            if (item.Quality > 0)
-                            {
-                                if (item.Name != Sulfuras)
-                                {
-                                    item.Quality -= 1;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            item.Quality -= item.Quality;
-                        }
-                    }
-                    else
+        }
+
+        private void UpdateBackstage(Item item)
+        {
+            if (item.Quality < 50)
+            {
+                item.Quality += 1;
+
+                    if (item.SellIn < 11)
                     {
                         if (item.Quality < 50)
                         {
                             item.Quality += 1;
                         }
                     }
-                }
+
+                    if (item.SellIn < 6)
+                    {
+                        if (item.Quality < 50)
+                        {
+                            item.Quality += 1;
+                        }
+                    }
+            }
+            item.SellIn -= 1;
+            if (item.SellIn < 0)
+            {
+                item.Quality -= item.Quality;
+            }
+        }
+
+        private void UpdateRegularItem(Item item)
+        {
+            if (item.Quality > 0)
+            {
+                item.Quality -= 1;
+            }
+            item.SellIn -= 1;
+
+            if (item.SellIn < 0 && item.Quality > 0)
+            {
+                item.Quality -= 1;
             }
         }
     }
